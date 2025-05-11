@@ -18,4 +18,4 @@ Secure App is a robust, production-grade **Spring Boot REST API** built to demon
 | **JWT Authentication (HS256)**    | Stateless and secure authentication via JSON Web Tokens                     |
 | **RBAC (Role-Based Access)**      | Admin/user role segregation and endpoint protection                         |
 | **Account Activation**            | Email verification workflow before login is enabled                         |
-| **Argon2d Password Hashing**      | Advanced password encryption algorithm for high
+| **Argon2d Password Hashing**      | Advanced password encryption algorithm for high security
