@@ -37,3 +37,9 @@ server:
   tomcat:
     max-threads: 200
     accept-count: 100
+
+rate:
+  limit:
+    capacity: 100
+    refill:
+      duration: 60

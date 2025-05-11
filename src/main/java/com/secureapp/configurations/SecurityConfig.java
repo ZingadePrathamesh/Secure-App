@@ -3,6 +3,7 @@ package com.secureapp.configurations;
 import com.secureapp.exceptions.DelegateAccessDeniedHandler;
 import com.secureapp.exceptions.DelegatedAuthenticationEntryPoint;
 import com.secureapp.filters.JWTFilter;
+import com.secureapp.filters.RateLimitFilter;
 import com.secureapp.service.UserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -47,7 +48,8 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex.
                         accessDeniedHandler(accessDeniedHandler)
                         .authenticationEntryPoint(authenticationEntryPoint))
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(rateLimitFilter(), JWTFilter.class);
 
         return http.build();
     }
@@ -63,6 +65,11 @@ public class SecurityConfig {
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
+    }
+
+    @Bean
+    public RateLimitFilter rateLimitFilter() {
+        return new RateLimitFilter();
     }
 
     @Bean
