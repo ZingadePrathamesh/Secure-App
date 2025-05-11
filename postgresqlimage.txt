@@ -1,0 +1,1 @@
+docker run -d  --name secure-app  -e POSTGRES_PASSWORD=2025secure-app@  -e POSTGRES_USER=secure-app  -e POSTGRES_DB=secureappdb  -p 5438:5432  postgres:latest
