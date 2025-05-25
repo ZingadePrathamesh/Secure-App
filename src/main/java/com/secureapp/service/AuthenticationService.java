@@ -4,6 +4,7 @@ import com.secureapp.dto.AuthenticationRequest;
 import com.secureapp.dto.AuthenticationResponse;
 import com.secureapp.dto.RegistrationRequest;
 import com.secureapp.enums.EmailTemplate;
+import com.secureapp.enums.Role;
 import com.secureapp.exceptions.TokenNotFoundException;
 import com.secureapp.exceptions.UserNotEnabledException;
 import com.secureapp.model.Token;
@@ -49,15 +50,24 @@ public class AuthenticationService {
 
 
     @Bean
-    public CommandLineRunner commandLineRunner(){
+    public CommandLineRunner commandLineRunner(
+            UserService userService,
+            PasswordEncoder passwordEncoder
+    ){
         return args -> {
-            RegistrationRequest admin = RegistrationRequest.builder()
+            UserProfile admin = UserProfile.builder()
+                    .id(null)
                     .firstName("Admin")
                     .lastName("Admin")
-                    .email("admin@gmail.com")
-                    .password("12345678")
+                    .email("zingadeprathamesh12@gmail.com")
+                    .password(passwordEncoder.encode(userService.getPassword()))
+                    .enabled(true)
+                    .accountLocked(false)
+                    .role(Role.ADMIN)
+                    .createdAt(LocalDateTime.now())
                     .build();
-            signUp(admin);
+
+            userService.saveStudent(admin);
         };
     }
 

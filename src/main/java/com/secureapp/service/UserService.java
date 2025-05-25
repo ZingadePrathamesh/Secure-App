@@ -7,7 +7,9 @@ import com.secureapp.filters.UserSpecification;
 import com.secureapp.mapper.UserMapper;
 import com.secureapp.model.UserProfile;
 import com.secureapp.respository.UserRepository;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+
+    @Getter
+    @Value("${GENERAL_PASSWORD}")
+    private String password;
 
     public UserProfile getById(Long id) {
         return userRepository.findById(id).orElseThrow(() ->

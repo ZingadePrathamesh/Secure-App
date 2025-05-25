@@ -55,7 +55,6 @@ public class RateLimitFilter extends OncePerRequestFilter {
         if (xfHeader != null && !xfHeader.isEmpty() && !"unknown".equalsIgnoreCase(xfHeader)) {
             String[] ips = xfHeader.split(",");
             String ip = ips[0].trim();
-            // Basic IP validation (optional)
             if (ip.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$")) {
                 return ip;
             }
