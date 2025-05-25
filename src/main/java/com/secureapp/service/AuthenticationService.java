@@ -1,5 +1,7 @@
 package com.secureapp.service;
 
+import com.secureapp.dto.AuthenticationRequest;
+import com.secureapp.dto.AuthenticationResponse;
 import com.secureapp.dto.RegistrationRequest;
 import com.secureapp.enums.EmailTemplate;
 import com.secureapp.exceptions.TokenNotFoundException;
@@ -7,8 +9,6 @@ import com.secureapp.exceptions.UserNotEnabledException;
 import com.secureapp.model.Token;
 import com.secureapp.model.UserProfile;
 import com.secureapp.respository.TokenRepository;
-import com.secureapp.dto.AuthenticationRequest;
-import com.secureapp.dto.AuthenticationResponse;
 import com.secureapp.respository.UserRepository;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ import static com.secureapp.mapper.UserMapper.toUserProfile;
 public class AuthenticationService {
     private final UserService userService;
     private final JWTService jwtService;
-    private final AuthenticationManager authenticationManager;
+    private final CustomAuthenticationProvider authenticationProvider;
     private final PasswordEncoder passwordEncoder;
     private final TokenRepository tokenRepository;
     private final UserRepository userRepository;
@@ -84,7 +84,7 @@ public class AuthenticationService {
         Token token = Token.builder()
                 .id(null)
                 .createdAt(LocalDateTime.now())
-                .expiresAt(LocalDateTime.now().plusSeconds(20))
+                .expiresAt(LocalDateTime.now().plusMinutes(30))
                 .userProfile(userProfile)
                 .token(tokenString)
                 .build();
@@ -117,7 +117,7 @@ public class AuthenticationService {
 
     public AuthenticationResponse signIn(AuthenticationRequest authRequest) {
         try {
-            Authentication authentication = authenticationManager.authenticate(
+            Authentication authentication = authenticationProvider.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             authRequest.getEmail(), authRequest.getPassword()
                     )

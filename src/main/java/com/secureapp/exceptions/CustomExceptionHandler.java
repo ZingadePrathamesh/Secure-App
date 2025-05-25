@@ -39,6 +39,16 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
         return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
     }
+    @ExceptionHandler({AccountLockedException.class})
+    public ResponseEntity<ErrorDetails> handleAccountLockedException(RuntimeException ex, WebRequest request){
+        ErrorDetails errorDetails = ErrorDetails.builder()
+                .message(ex.getMessage())
+                .status(HttpStatus.LOCKED.value())
+                .description(request.getDescription(false))
+                .timeStamp(LocalDateTime.now().toString())
+                .build();
+        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(

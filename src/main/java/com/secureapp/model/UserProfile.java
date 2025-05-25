@@ -1,5 +1,6 @@
 package com.secureapp.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.secureapp.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -37,6 +38,7 @@ public class UserProfile implements UserDetails, Principal {
     @Email(message = "Invalid email address!")
     private String email;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String password;
 
     @Enumerated(EnumType.ORDINAL)

@@ -4,6 +4,8 @@ import com.secureapp.exceptions.DelegateAccessDeniedHandler;
 import com.secureapp.exceptions.DelegatedAuthenticationEntryPoint;
 import com.secureapp.filters.JWTFilter;
 import com.secureapp.filters.RateLimitFilter;
+import com.secureapp.service.BruteForceProtectionService;
+import com.secureapp.service.CustomAuthenticationProvider;
 import com.secureapp.service.UserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -54,18 +56,30 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+//        return authenticationConfiguration.getAuthenticationManager();
+//    }
+
+//    @Bean
+//    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+//        return http.getSharedObject(AuthenticationManager.class);
+//    }
 
     @Bean
     public AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        return daoAuthenticationProvider;
+        return new CustomAuthenticationProvider(passwordEncoder(), new BruteForceProtectionService(),userDetailsService);
     }
+
+//    @Bean
+//    public AuthenticationProvider authenticationProvider(){
+//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+//        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+//        return daoAuthenticationProvider;
+//    }
+
+
 
     @Bean
     public RateLimitFilter rateLimitFilter() {

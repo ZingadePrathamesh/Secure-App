@@ -48,10 +48,10 @@ public class AuthenticationController {
     }
 
     @GetMapping("activate-account")
-    public ResponseEntity activateAccount(
+    public ResponseEntity<String> activateAccount(
             @RequestParam String token
     ) throws AuthenticationException, MessagingException {
         authenticationService.activateAccount(token);
-        return ResponseEntity.accepted().build();
+        return ResponseEntity.accepted().body("Account Activated");
     }
 }

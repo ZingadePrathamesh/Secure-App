@@ -1,14 +1,14 @@
 package com.secureapp.controllers;
 
+import com.secureapp.dto.UserDTO;
+import com.secureapp.dto.UserFilter;
 import com.secureapp.model.UserProfile;
 import com.secureapp.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,4 +31,21 @@ public class UserController {
     ){
         return ResponseEntity.ok(userService.getById(id));
     }
+
+    @GetMapping("/user-id/{user-id}/filter")
+    public ResponseEntity<Page<UserDTO>> getUserByFilter(
+            @ModelAttribute UserFilter userFilter
+            ){
+        return ResponseEntity.ok(userService.getAllUsers(userFilter));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("user-id/{user-id}/delete/{delete-id}")
+    public ResponseEntity deleteUser(
+            @PathVariable("delete-id") Long id
+    ){
+        userService.deleteStudent(id);
+        return ResponseEntity.accepted().build();
+    }
+
 }
