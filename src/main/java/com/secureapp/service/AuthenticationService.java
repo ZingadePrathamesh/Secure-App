@@ -55,19 +55,7 @@ public class AuthenticationService {
             PasswordEncoder passwordEncoder
     ){
         return args -> {
-            UserProfile admin = UserProfile.builder()
-                    .id(null)
-                    .firstName("Admin")
-                    .lastName("Admin")
-                    .email("zingadeprathamesh12@gmail.com")
-                    .password(passwordEncoder.encode(userService.getPassword()))
-                    .enabled(true)
-                    .accountLocked(false)
-                    .role(Role.ADMIN)
-                    .createdAt(LocalDateTime.now())
-                    .build();
 
-            userService.saveStudent(admin);
         };
     }
 

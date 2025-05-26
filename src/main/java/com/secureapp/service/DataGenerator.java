@@ -3,8 +3,10 @@ package com.secureapp.service;
 import com.secureapp.enums.Role;
 import com.secureapp.model.UserProfile;
 import com.secureapp.respository.UserRepository;
+import lombok.Getter;
 import net.datafaker.Faker;
 import org.apache.commons.text.RandomStringGenerator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
@@ -19,6 +21,10 @@ import java.util.Set;
 @Service
 public class DataGenerator {
 
+    @Getter
+    @Value("${GENERAL_PASSWORD}")
+    private String password;
+
     @Bean
     @Order(value = 1)
     public CommandLineRunner insertUserProfiles(
@@ -29,6 +35,21 @@ public class DataGenerator {
             if(userRepository.count() > 0){
                 return;
             }
+
+            UserProfile admin = UserProfile.builder()
+                    .id(null)
+                    .firstName("Admin")
+                    .lastName("Admin")
+                    .email("zingadeprathamesh12@gmail.com")
+                    .password(passwordEncoder.encode(this.getPassword()))
+                    .enabled(true)
+                    .accountLocked(false)
+                    .role(Role.ADMIN)
+                    .createdAt(LocalDateTime.now())
+                    .build();
+
+            userRepository.save(admin);
+
             Faker faker = new Faker();
             Set<UserProfile> userProfiles = new HashSet<>();
             for(int i = 0; i < 100; i++){

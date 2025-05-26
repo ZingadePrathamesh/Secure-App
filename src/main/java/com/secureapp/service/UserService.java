@@ -23,10 +23,6 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
-    @Getter
-    @Value("${GENERAL_PASSWORD}")
-    private String password;
-
     public UserProfile getById(Long id) {
         return userRepository.findById(id).orElseThrow(() ->
                 new UserNotFoundException("User does not exists with id : " + id));
